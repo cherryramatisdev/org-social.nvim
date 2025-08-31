@@ -4,6 +4,10 @@
 
 An Neovim client for [Org Social](https://github.com/tanrax/org-social), a decentralized social network that works with Org Mode files over HTTP.
 
+## Demo - 30/09/2025
+
+[![demo](https://asciinema.org/a/736713.svg)](https://asciinema.org/a/736713)
+
 ## Dependencies
 
 This plugin rely heavily on [nvim-orgmode](https://github.com/nvim-orgmode/orgmode) to provide the tree-sitter grammar used in queries for parsing.
