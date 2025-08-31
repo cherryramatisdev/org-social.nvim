@@ -1,0 +1,185 @@
+#+TITLE: Omid's Blog
+#+NICK: omidmash
+#+DESCRIPTION: I am a Music and Computer Teacher, and a Sysadmin. I love Emacs, jazz and cooking.
+#+LINK: https://omidmash.de
+#+CONTACT: matrix:@omidmash:omidmash.deadly
+#+CONTACT: mailto:kontakt@omidmash.de
+#+FOLLOW: andros https://andros.dev/static/social.org
+#+FOLLOW: rossa https://rossabaker.com/social.org
+#+FOLLOW: john https://johnhame.link/social.org
+#+FOLLOW: eoin https://eoin.site/social.org
+#+FOLLOW: adsan https://adsan.dev/social.org
+#+FOLLOW: emillo https://emillo.net/social.org
+#+FOLLOW: cmdline https://cmdln.org/social.org
+
+* Posts
+** :PROPERTIES:
+:ID: 2025-08-15T09:31:00+01:00
+:TITLE: A new frontier!
+:LANG: en
+:END:
+
+Good morning! This is my first post on Org-Social. A new frontier? The bleeding edge of communication? The concept is neat. When one uses Emacs, a software from last century for almost everything else, why not also socialize on it with other like minded people? I think there is a certain beauty in that.
+
+** :PROPERTIES:
+:ID: 2025-08-15T09:37:00+01:00
+:TITLE: Adventures with enterprise gear
+:LANG: en
+:END:
+
+I slowly have nothing left to configure. So before I start completely breaking my stuff or â€“ god forbid â€“ switch to Gentoo, I'll start with some light blogging. It started on my website, but I think I will move it on here for now. On the side, nice and relaxed!
+
+For a few years now, I've owned an R210 server that was initially only in operation occasionally. Electricity costs are of course high in Germany (almost 0.40 Cent per kw/h), but besides the electricity costs, the fan noise was also a problem. That's why I only used it occasionally to try things out and then turned it off again after a week at most. I am also a musician, so when I needed to record, I had to kill the server... Suboptimal.
+
+In 2024, however, I had an idea: Making the Dell R210II server even quieter.
+
+I found a [[https://www.reddit.com/r/homelab/comments/f7hift/dell_r210ii_to_get_the_server_even_quieter_i/][post]] on reddit. First, I only replaced the PSU fans with a Noctua variant, as the PSU fans are the only fans that aren't controllable via IPMI and thus run at a volume similar to a lawnmower. However, as /u/Apserger96 warned:
+
+#+begin_quote
+IMPORTANT: When you put the fan back into the power supply, you must only use the two top screws to secure it. The lower ones cause short circuits! The two upper screws are sufficient for a firm hold!
+#+end_quote
+
+I didn't pay attention to that and wondered why my server only started for a few seconds. That was the reason.
+
+Of course, I don't recommend anyone to screw around in PSUs â€“ the capacitors in PSUs theoretically retain their charge for a very long time. I waited half a day, and they *do* have safety features, but still: if something had gone wrong, it could have been deadly.
+
+But it's running now! Everything is quiet, and since then my server has been running 24/7. This post is also hosted on that server.
+** :PROPERTIES:
+:ID: 2025-08-15T12:05:41+02:00
+:TITLE: RE: RE: Adventures with enterprise gear
+:REPLY_TO: https://johnhame.link/social.org/#2025-08-15T10:40:00+00:00
+:LANG: en
+:END:
+
+Acoustic server rack sounds nice, but yes, they are insanely expensive right now. I managed to find a 36u rack for free (if I picked it up), and moved that here to my home office/studio. Carrying it 4 floors wasn't fun :)
+I have removed the door to my rack as well, beacuse I have put my 3d printer in there as well as some storage drawers.
+Consider yourself lucky that you could hotswap everything. Dell is finnicky, and has it's own wiring, so I need to redo the cabling. Not hard, especially with those connector-bulb-thingies that ships with the Noctuas. Still need to get around to it. When the server fans do speed up under load, the noise is insane.
+
+#+begin_quote
+By the way, there's an extra =END:=, =:ID:=, and =:AUTHOR:= in your post -
+just thought I'd mention!
+#+end_quote
+
+I see an END: at beginning of every post. Check this [[https://github.com/tanrax/org-social/issues/6][issue]]. I checked my syntax, and it shows as:
+#+begin_src emacs-lisp
+:PROPERTIES:
+:ID: 2025-08-15T09:37:00+01:00
+:AUTHOR: omidmash
+:TITLE: Adventures with enterprise gear
+:LANG: en
+:END:
+#+end_src
+I removed the unneccesary ~:AUTHOR:~ tag, but everything else seems to be right?
+
+As of the Reply functionality, not quite sure how it works. I manyally built the ~TITLE~ and ~REPLY_TO~ tags for this post, and I only saw that your post was a reply, after I had unfolded and checked the tags of your post manually.
+** :PROPERTIES:
+:ID: 2025-08-15T12:33:14+02:00
+:REPLY_TO: https://johnhame.link/social.org/#2025-08-15T10:40:00+00:00
+:LANG: en
+:END:
+
+Interesting, this is what your properties looks like to me:
+#+begin_src emacs-lisp
+:PROPERTIES:
+:ID: 2025-08-15T10:40:00+00:00
+:AUTHOR: john
+:FEED_URL: https://johnhame.link/social.org
+:REPLY_TO: https://omidmash.de/social.org/#2025-08-15T09:37:00+01:00
+:LANG: en
+:FEED_URL: https://johnhame.link/social.org
+:AUTHOR: johnhamelink
+:TITLE: RE: Adventures with enterprise gear
+:AUTHOR: johnhamelink
+:ID: 2025-08-15T10:40:00+00:00
+:END:
+#+end_src
+
+** :PROPERTIES:
+:ID: 2025-08-17T13:45:13+0200
+:MOOD: ðŸ˜€
+:END:
+Ah, managed to fix my issues setting a default social.org file using SSHFS. Before I used to SSH into my server via tramp, but the new feed broke that. Now I am back on org-social.
+
+** :PROPERTIES:
+:ID: 2025-08-17T19:24:38+0200
+:LANG: en
+:TAGS: emacs org-mode
+:END:
+
+There are very few quality classroom management software options available, whether free or proprietary. Most of the recommended solutions are designed for touchscreens and are only compatible with Macs. Next year, I'm planning to rely solely on Org mode, utilizing tables and formulas, which should be sufficient. Here is some work in progress:
+
+Template - Musik - 25/26
+A. MÃ¼ndlich
+    | Vorname | Nachname   | Engagement | Kritisches denken | StÃ¶rungen | Total | Note |
+    |---------+------------+------------+-------------------+-----------+-------+------|
+    | max     | musterman  |          3 |                 2 |         2 |     7 |   4+ |
+    | lisa    | musterfrau |          4 |                 1 |         5 |    10 |    3 |
+    #+TBLFM: $6=$3+$4+$5
+    #+TBLFM: $7='(cond ((<= $6 0) "Nicht bestanden") ((= $6 1) "5-") ((= $6 2) "5-") ((= $6 3) "5") ((= $6 4) "5+") ((= $6 5) "4-") ((= $6 6) "4") ((= $6 7) "4+") ((= $6 8) "3-") ((= $6 9) "3+") ((= $6 10) "3") ((= $6 11) "2-") ((= $6 12) "2") ((= $6 13) "2+") ((= $6 14) "1-") ((= $6 15) "1") (t "Nicht bestanden"));L
+B. Schriftlich
+   1. Test Placeholder
+       | Vorname | Nachname   | Test 1 | Test 1 Max | Test 1 Total % | Test 1 Note |
+       |         |            |        |         30 |                |             |
+       |---------+------------+--------+------------+----------------+-------------|
+       | max     | musterman  |     22 |            |             73 |          2- |
+       | lisa    | musterfrau |     19 |            |             63 |           3 |
+       #+TBLFM: $5=trunc(($3/@2$4)*100)
+       #+TBLFM: $6='(cond ((>= $5 95) "1+") ((>= $5 90) "1") ((>= $5 85) "1-") ((>= $5 80) "2+") ((>= $5 75) "2") ((>= $5 70) "2-") ((>= $5 65) "3+") ((>= $5 60) "3") ((>= $5 55) "3-") ((>= $5 50) "4+") ((>= $5 45) "4") ((>= $5 40) "4-") ((>= $5 33) "5+") ((>= $5 27) "5") ((>= $5 20) "5-") (t "6"));L
+C. Sitzordnung
+    |   |   |   |   |   |   |   |   |      |     |
+    |   |   |   |   |   |   |   |   |      |     |
+    |   |   |   |   |   |   |   |   | lisa | max |
+D. Notizen
+   - Sun Aug 17 19:33:44 2025
+     lorem ipsum
+
+** :PROPERTIES:
+:ID: 2025-08-18T12:04:51+0200
+:LANG:
+:TAGS:
+:CLIENT: org-social.el
+:REPLY_TO: https://andros.dev/static/social.org#2025-08-18T11:24:36+0200
+:MOOD:
+:END:
+You're on fire. ðŸ”¥
+Just noticed that my Author URL is now my path. Any way to change this?
+Also, there is some extra stuff after the user handle:
+#+begin_src emacs-lisp
+omidmash :END: #:CLIENT: #org-social.el
+    :PROPERTIES:
+    :ID: 2025-08-18T12:04:51+0200
+    :END:
+    # Author URL: /mnt/org-social/social.org
+#+end_src
+
+** :PROPERTIES:
+:ID: 2025-08-18T13:15:00+0200
+:LANG:
+:TAGS:
+:CLIENT: org-social.el
+:REPLY_TO: https://andros.dev/static/social.org#2025-08-18T13:13:03+0200
+:MOOD:
+:END:
+Ah I see, so it shows up as https://omidmash.de/social.org for you?
+I am very happy with the timeline as is. A cool option would be to highlight the replies somehow more. For instance, the only way I could see that you are replying to me is by inspecting the post. Maybe something like sendername@receivername in the title. Another idea would be to have the #+FOLLOW bit in a different file, so one can for instance pull the register from git. But please don't overwork yourself. I think the project is very cool as is and there is a LOT of potential here. The userbase will always be small, but that is perhaps a good thing ðŸ˜Ž
+
+** :PROPERTIES:
+:ID: 2025-08-21T13:32:33+0200
+:LANG:
+:TAGS:
+:CLIENT: org-social.el
+:REPLY_TO: https://rossabaker.com/social.org#2025-08-20T23:09:07-0400
+:MOOD:
+:END:
+@rossabaker
+It's true though. I can't shut up about emacs either...
+
+** :PROPERTIES:
+:ID: 2025-08-25T13:34:40+0200
+:LANG:
+:TAGS:
+:CLIENT: org-social.el
+:REPLY_TO: https://adsan.dev/social.org#2025-08-25T02:16:59+0200
+:MOOD:
+:END:
+@adsan I fixed the org files not being served as plaintext. However, I do not have any ip rate-limit set. Maybe it's just my ISP, as I am selfhosting on my own hardware?

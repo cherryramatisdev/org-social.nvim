@@ -1,0 +1,80 @@
+#+TITLE: Org Social Timeline
+
+* (0) Notifications
+:PROPERTIES:
+:VISIBILITY: folded
+:END:
+
+No new notifications.
+
+* Timeline
+
+** cherry
+:PROPERTIES:
+:ID: 2025-08-30T10:50:00+0100
+:CUSTOM_ID: 2025-08-30T10:50:00+0100
+:END:
+
+This is my first post on Org Social.
+
+** adsan
+:PROPERTIES:
+:ID: 2025-08-27T04:55:02+02:00
+:CUSTOM_ID: 2025-08-27T04:55:02+02:00
+:URL: https://adsan.dev/social.org
+:LANG: en
+:END:
+
+Hello world
+
+For the better part of a week, I've been busy creating an org-social.el alternative
+I like emacs, but don't really enjoy elisp, so contributing to the main client seemed unapealing.
+Also, I wanted to integrate org-social into my dashboard, powered by [[https://github.com/wtfutil/wtf][wtfutil]].
+
+As such, I've created a rust library for parsing org-social, a subset of org mode, and some post and profile management.
+And paired with that, a cli/tui client, that allows for *some* interaction with the network.
+
+The project is still very WIP, slapped together in a very short time, and lacks a lot of features that a text editor just provides.
+But still, I think it's worth publishing, if anyone ever needs to use it.
+
+[[https://github.com/AdsanTheGreat/org-social-rs][Client]]
+[[https://github.com/AdsanTheGreat/org-social-lib-rs][Library]]
+
+** emillo
+:PROPERTIES:
+:ID: 2025-08-26T21:39:46+0200
+:CUSTOM_ID: 2025-08-26T21:39:46+0200
+:URL: https://emillo.net/social.org
+:TAGS: debian emacs bankrupcy
+:END:
+
+Indeed, August is a month of vacations, besides I was busy upgrading
+my (three, four? I don't remember) machines to debian 13 trixie (which
+by the way is fantastic) but doing so I've started to feel a bit
+uneasy about my old, messy emacs configuration...
+
+Basically I declared /emacs bankrupcy/ :O
+
+So, inspired by [[https://github.com/ISouthRain/OpenEmacs][openEmacs]] I started a [[https://github.com/emillo/emacs_configuration][new literate config]] from scratch
+(of course it's still WIP with plenty of TODOs).
+
+I use emacs at work, at home and on mobile/e-ink devices so the first
+requirement was to being able to tell apart what is native vanilla
+emacs from what comes from an external source as I don't want to rely
+too much on packages when there is a built-in alternative. Some of the
+reasoning is explained in the README.
+
+Another thing that trixie brings to the table is a perfectly compiled
+emacs 30.1. I usually build emacs from source but this time the
+version included in the distro is adequately /current/, with native
+compilation and whatnot so I kept that and used also many emacs
+packages directly from the debian repo.
+
+The conf is splitted in four files, the ~early-init.el~, ~init.el~
+containing vanilla features, ~provided-by-debian.el~ containing packages
+available in debian and ~provided-by-gnu-nongnu-melpa.el~ for everything
+else (currently empty).
+
+Let me know what you think!
+
+Ah, I also corrected the social.org being served as file.
