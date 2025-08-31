@@ -39,10 +39,9 @@ local function fetch_timeline(follows, on_result)
     end
 end
 
-function M.parse_timeline(follows)
+function M.parse_timeline(follows, on_result)
     fetch_timeline(follows, function(results)
         local parsed_feeds = {}
-
         for _, result in ipairs(results) do
             local temp_buf = vim.api.nvim_create_buf(false, true)
             vim.api.nvim_set_option_value('filetype', 'org', { scope = 'local', buf = temp_buf })
@@ -56,7 +55,7 @@ function M.parse_timeline(follows)
             vim.api.nvim_buf_delete(temp_buf, {})
         end
 
-        print('parsed_feeds', vim.inspect(parsed_feeds))
+        on_result(parsed_feeds)
     end)
 end
 

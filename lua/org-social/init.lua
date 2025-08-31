@@ -1,4 +1,5 @@
 local timeline = require('org-social.timeline')
+local view = require('org-social.view')
 local treesitter = require('ts-wrapper')
 
 ---@class SocialModule
@@ -31,7 +32,10 @@ function M.open_timeline()
     end
 
     local follows = ts_wrapper:get_follows(buf)
-    local timeline = timeline.parse_timeline(follows)
+
+    timeline.parse_timeline(follows, function(parsed_feeds)
+        view.render_timeline(parsed_feeds)
+    end)
 end
 
 return M
