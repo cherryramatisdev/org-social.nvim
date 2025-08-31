@@ -4,9 +4,9 @@
 
 An Neovim client for [Org Social](https://github.com/tanrax/org-social), a decentralized social network that works with Org Mode files over HTTP.
 
-## Demo - 30/09/2025
+## Demo - 31/09/2025
 
-[![demo](https://asciinema.org/a/736713.svg)](https://asciinema.org/a/736713)
+[![demo](https://asciinema.org/a/736914.svg)](https://asciinema.org/a/736914)
 
 ## Dependencies
 
@@ -65,4 +65,4 @@ require'org-social'.setup {
 1. `OrgSocialTimeline` :: This command open a new buffer loading your timeline that consist of the posts people you follow made and what their interaction with your posts were.
     a) `OrgSocialReplyToPost` :: When on the timeline, you can run this command to reply the current focused post.
 2. `OrgSocialNewPost` :: A capture window for quickly making a new post.
-2. `OrgSocialOpenFile` :: Open your static file so you can edit it manually.
+2. `OrgSocialEditFile` :: Open your static file so you can edit it manually.
