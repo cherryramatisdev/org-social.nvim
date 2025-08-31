@@ -22,8 +22,15 @@ You can use any package manager to install and setup this plugin.
 --- after/plugin/org-social.lua
 
 vim.pack.add({
-    { src = 'https://github.com/cherryramatisdev/org-social.nvim', version = 'main' }
+    { src = 'https://github.com/cherryramatisdev/org-social.nvim', version = 'main' },
+    { src = 'https://github.com/nvim-orgmode/orgmode', version = 'master' }
 })
+
+if not pcall(require, 'orgmode') then
+    return
+end
+
+require'orgmode'.setup {}
 
 if not pcall(require, 'org-social') then
     return
@@ -41,6 +48,9 @@ require'org-social'.setup {
 {
   'cherryramatisdev/org-social.nvim',
   event = 'VeryLazy',
+  dependencies = {
+      { 'nvim-orgmode/orgmode', config = true }
+  },
   config = function()
     -- TOOD: still reviewing the parameters necessary
     require('org-social').setup {
