@@ -122,4 +122,66 @@ function TSWrapper:get_metadata(bufnr)
     return metadata
 end
 
+function TSWrapper:get_posts(bufnr)
+    local lang = self.parser:lang()
+    local ok_query, query = pcall(vim.treesitter.query.parse, lang, [[
+        (document
+              subsection: (section
+                    headline: (headline
+                                item: (item) @headline)
+                    ) @posts
+              (#eq? @headline "Posts"))
+    ]])
+
+    if not ok_query or not query then
+        return {}
+    end
+
+    local posts = {}
+
+    for id, node, _ in query:iter_captures(self.root, bufnr) do
+        local capture = query.captures[id]
+        if capture == 'posts' then
+            local raw_content = vim.treesitter.get_node_text(node, bufnr)
+            raw_content = raw_content:gsub("* Posts", "")
+
+            local raw_posts = vim.split(raw_content:gsub("\n%*%*%s*", "\0"), "\0")  -- Match \n** with optional spaces
+
+            for _, post in ipairs(raw_posts) do
+                if #post > 0 then
+                    local id_line = post:match(":ID:%s+(.-)\n")
+                    local date_id, datetime_str
+                    if id_line then
+                        date_id = id_line:gsub("\n", "")
+                        datetime_str = date_id
+                    end
+
+                    if datetime_str then
+                        local year, month, day, hour, min, sec = datetime_str:match(
+                            "^(%d%d%d%d)-(%d%d)-(%d%d)T(%d%d):(%d%d):(%d%d)")
+
+                        local timestamp = datetime_str and os.time({
+                            year = year,
+                            month = month,
+                            day = day,
+                            hour = hour,
+                            min = min,
+                            sec = sec,
+                        }) or 0
+
+                        table.insert(posts, {
+                            content = post,
+                            id = date_id,
+                            timestamp = timestamp
+                        })
+                    end
+
+                end
+            end
+        end
+    end
+
+    return posts
+end
+
 return TSWrapper

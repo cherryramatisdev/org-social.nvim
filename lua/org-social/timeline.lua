@@ -50,7 +50,11 @@ function M.parse_timeline(follows, on_result)
             local temp_ts = treesitter:new(temp_buf)
 
             if temp_ts then
-                parsed_feeds[result.follow.name] = { metadata = temp_ts:get_metadata(temp_buf), follows = temp_ts:get_follows(temp_buf) }
+                parsed_feeds[result.follow.name] = {
+                    metadata = temp_ts:get_metadata(temp_buf),
+                    follows = temp_ts:get_follows(temp_buf),
+                    posts = temp_ts:get_posts(temp_buf)
+                }
             end
             vim.api.nvim_buf_delete(temp_buf, {})
         end
