@@ -13,7 +13,14 @@
 #+FOLLOW: cmdline https://cmdln.org/social.org
 
 * Posts
-** :PROPERTIES:
+**
+:PROPERTIES:
+:ID: 2024-12-12T12:00:00+0100
+:END:
+
+This is my first post on Org Social.
+** 
+:PROPERTIES:
 :ID: 2025-08-15T09:31:00+01:00
 :TITLE: A new frontier!
 :LANG: en
@@ -21,7 +28,8 @@
 
 Good morning! This is my first post on Org-Social. A new frontier? The bleeding edge of communication? The concept is neat. When one uses Emacs, a software from last century for almost everything else, why not also socialize on it with other like minded people? I think there is a certain beauty in that.
 
-** :PROPERTIES:
+** 
+:PROPERTIES:
 :ID: 2025-08-15T09:37:00+01:00
 :TITLE: Adventures with enterprise gear
 :LANG: en
