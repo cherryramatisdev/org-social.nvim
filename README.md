@@ -38,7 +38,9 @@ end
 
 -- TOOD: still reviewing the parameters necessary
 require'org-social'.setup {
-    social_file = vim.fn.expand("path to your social.org file")
+    social_file = vim.fn.expand("path to your social.org file"),
+    path = 'url to your social.org file',
+    nickname = 'nickname that you go by'
 }
 ```
 
@@ -54,7 +56,9 @@ require'org-social'.setup {
   config = function()
     -- TOOD: still reviewing the parameters necessary
     require('org-social').setup {
-        social_file = vim.fn.expand("path to your social.org file")
+        social_file = vim.fn.expand("path to your social.org file"),
+        path = 'url to your social.org file',
+        nickname = 'nickname that you go by'
     }
   end,
 }
