@@ -1,0 +1,79 @@
+*org-social*                                            org-social
+
+==============================================================================
+Table of Contents                           *org-social-table-of-contents*
+
+1. Setup                                                |org-social-setup|
+2. Commands						|org-social-commands|
+
+An Neovim client for |https://github.com/tanrax/org-social, a decentralized social network that works with Org Mode files over HTTP.
+
+==============================================================================
+1. Setup                                                *org-social-setup*
+
+Using the *lazy* package manager by folke:
+
+>lua
+    {
+      'cherryramatisdev/org-social.nvim',
+      event = 'VeryLazy',
+      dependencies = {
+	  { 'nvim-orgmode/orgmode', config = true }
+      },
+      config = function()
+	require('org-social').setup {
+	    social_file = vim.fn.expand("path to your social.org file"),
+	    path = 'url to your social.org file',
+	    nickname = 'nickname that you go by'
+	}
+      end,
+    }
+<
+
+Using the default package manager present on nightly releases *vim.pack*:
+
+>lua
+    --- after/plugin/org-social.lua
+
+    vim.pack.add({
+	{ src = 'https://github.com/cherryramatisdev/org-social.nvim', version = 'main' },
+	{ src = 'https://github.com/nvim-orgmode/orgmode', version = 'master' }
+    })
+
+    if not pcall(require, 'orgmode') then
+	return
+    end
+
+    require'orgmode'.setup {}
+
+    if not pcall(require, 'org-social') then
+	return
+    end
+
+    require'org-social'.setup {
+	social_file = vim.fn.expand("path to your social.org file"),
+	path = 'url to your social.org file',
+	nickname = 'nickname that you go by'
+    }
+<
+
+- `social_file` :: This is the path to the physical location of your org file,
+the one you'll manually edit it or that we'll programatically append when
+creating a new post.
+- `path` :: This is the virtual path in your server, e.g:
+|https://cherryramatis.xyz/social.org|
+- `nickname` :: The nick you'll be referred to on the client, typically
+registered as `#+NICK: ...` in your org file.
+
+
+==============================================================================
+2. Commands                                              *org-social-commands*
+
+- `OrgSocialTimeline` :: This command opens a buffer containing your posts and
+all the posts of the accounts you follow.
+- `OrgSocialEditFile` :: Open your `social_file` in a new tab so you can
+manually edit it.
+- `OrgSocialNewPost` :: Open a capture popup window to help you write a new
+post and be appended to your `social_file`.
+
+vim:tw=78:ts=8:noet:ft=help:norl:

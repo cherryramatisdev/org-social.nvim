@@ -14,7 +14,7 @@ local M = {} --- [[@as SocialModule]]
 ---@param opts { social_file: string, path: string, nickname: string }
 function M.setup(opts)
     if not opts.social_file or not opts.path or not opts.nickname then
-        vim.notify('Please provide a social_file, path and nickname as parameters to your .setup call. For more information on each parameter, run :h org-social.nvim', vim.log.levels.ERROR)
+        vim.notify('Please provide a social_file, path and nickname as parameters to your .setup call. For more information on each parameter, run :h org-social', vim.log.levels.ERROR)
         return
     end
 
