@@ -22,10 +22,8 @@ local function parse_properties(content)
     return id, reply_to
 end
 
-function M.render_timeline(parsed_feeds)
-    local lines = {}
+local function parse_posts(parsed_feeds)
     local all_posts = {}
-
     for username, feed in pairs(parsed_feeds) do
         for _, post in ipairs(feed.posts) do
             if post.content and #post.content > 0 then
@@ -37,6 +35,33 @@ function M.render_timeline(parsed_feeds)
             end
         end
     end
+
+    return all_posts
+end
+
+local function prepare_timeline_buffer(lines)
+    local temp_file = vim.fn.tempname() .. '.org'
+    vim.fn.writefile(lines, temp_file)
+    vim.cmd.vsplit(temp_file)
+
+    local buf = vim.api.nvim_get_current_buf()
+
+    vim.api.nvim_set_option_value('modified', false, { scope = 'local', buf = buf })
+    vim.api.nvim_set_option_value('bufhidden', 'delete', { scope = 'local', buf = buf })
+
+    vim.api.nvim_create_autocmd({ 'BufDelete', 'BufWipeout' }, {
+        buffer = buf,
+        callback = function()
+            if vim.fn.filereadable(temp_file) == 1 then
+                os.remove(temp_file)
+            end
+        end
+    })
+end
+
+function M.render_timeline(parsed_feeds)
+    local lines = {}
+    local all_posts = parse_posts(parsed_feeds)
 
     local id_to_post = {}
     local parents = {}
@@ -87,23 +112,7 @@ function M.render_timeline(parsed_feeds)
         end
     end
 
-    local temp_file = vim.fn.tempname() .. '.org'
-    vim.fn.writefile(lines, temp_file)
-    vim.cmd.vsplit(temp_file)
-
-    local buf = vim.api.nvim_get_current_buf()
-
-    vim.api.nvim_set_option_value('modified', false, { scope = 'local', buf = buf })
-    vim.api.nvim_set_option_value('bufhidden', 'delete', { scope = 'local', buf = buf })
-
-    vim.api.nvim_create_autocmd({ 'BufDelete', 'BufWipeout' }, {
-        buffer = buf,
-        callback = function()
-            if vim.fn.filereadable(temp_file) == 1 then
-                os.remove(temp_file)
-            end
-        end
-    })
+    prepare_timeline_buffer(lines)
 end
 
 return M
