@@ -5,18 +5,22 @@ local treesitter = require('ts-wrapper')
 
 ---@class SocialModule
 ---@field social_file string
+---@field nickname string
+---@field path string
 ---@field setup fun(opts: { social_file: string })
 
 local M = {} --- [[@as SocialModule]]
 
----@param opts { social_file: string }
+---@param opts { social_file: string, path: string, nickname: string }
 function M.setup(opts)
-    if not opts.social_file then
-        vim.notify('Please provide a social_file parameter to your .setup call', vim.log.levels.ERROR)
+    if not opts.social_file or not opts.path or not opts.nickname then
+        vim.notify('Please provide a social_file, path and nickname as parameters to your .setup call. For more information on each parameter, run :h org-social.nvim', vim.log.levels.ERROR)
         return
     end
 
     M.social_file = opts.social_file
+    M.path = opts.path
+    M.nickname = opts.nickname
 end
 
 function M.open_timeline()
@@ -32,7 +36,11 @@ function M.open_timeline()
         return
     end
 
+    local metadata = ts_wrapper:get_metadata(buf)
+
     local follows = ts_wrapper:get_follows(buf)
+
+    table.insert(follows, { name = M.nickname, url = M.path })
 
     timeline.parse_timeline(follows, function(parsed_feeds)
         view.render_timeline(parsed_feeds)
