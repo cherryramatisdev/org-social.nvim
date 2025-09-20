@@ -184,4 +184,59 @@ function TSWrapper:get_posts(bufnr)
     return posts
 end
 
+---@param bufnr integer
+---@return table<string, string>
+function TSWrapper:get_current_post_reply_id(bufnr)
+    local cursor_node = vim.treesitter.get_node { bufnr = bufnr }
+    if not cursor_node then return {} end
+
+    -- Navigate up to find the nearest section containing properties
+    local target_node = cursor_node
+    while target_node do
+        if target_node:type() == 'section' then
+            break
+        end
+        target_node = target_node:parent()
+    end
+    if not target_node then return {} end
+
+    local lang = self.parser:lang()
+    local ok_query, query = pcall(vim.treesitter.query.parse, lang,
+        [[
+        (section
+          (body
+            (drawer
+                contents: (contents) @properties))) @section
+    ]])
+
+    if not ok_query or not query then
+        return {}
+    end
+
+    local metadata = {}
+    for _, match in query:iter_matches(target_node, bufnr) do
+        for id, nodes in pairs(match) do
+            local capture = query.captures[id]
+            local node_text = vim.treesitter.get_node_text(nodes[1], bufnr)
+
+            if capture == 'properties' then
+                local properties = vim.split(node_text, '\n')
+                for _, property in pairs(properties) do
+                    if string.find(property, ':ID:') then
+                        metadata.current_name = 'id'
+                        metadata.current_value = vim.split(property, ' ')[2]
+                        break
+                    end
+                end
+            end
+        end
+
+        if metadata.current_name and metadata.current_value then
+            metadata[metadata.current_name] = metadata.current_value
+        end
+    end
+
+    return metadata
+end
+
 return TSWrapper

@@ -23,6 +23,61 @@ function M.setup(opts)
     M.nickname = opts.nickname
 end
 
+local function load_timeline(opts)
+    local follows = opts.ts_wrapper:get_follows(opts.buf)
+
+    table.insert(follows, { name = M.nickname, url = M.path })
+
+    timeline.parse_timeline(follows, function(parsed_feeds)
+        local lines = view.render_timeline(parsed_feeds)
+        vim.fn.writefile(lines, opts.temp_file)
+
+        opts.open_win(opts.temp_file)
+
+        local timeline_buf = vim.api.nvim_get_current_buf()
+
+        vim.api.nvim_set_option_value('modified', false, { scope = 'local', buf = timeline_buf })
+        vim.api.nvim_set_option_value('bufhidden', 'delete', { scope = 'local', buf = timeline_buf })
+
+        vim.keymap.set('n', 'gq', 'ZQ', { desc = '[Org social] Quit timeline buffer', buffer = true })
+
+        vim.keymap.set('n', '<c-r>', function()
+            load_timeline {
+                buf = opts.buf,
+                ts_wrapper = opts.ts_wrapper,
+                temp_file = opts.temp_file,
+                open_win = function(temp_file)
+                    vim.cmd.edit(temp_file)
+                end
+            }
+        end, { desc = '[Org social] Refresh the buffer', buffer = true })
+
+        vim.keymap.set('n', '<leader>n', function()
+            M.new_post {}
+        end, { desc = '[Org social] Create new post', buffer = true })
+
+        vim.keymap.set('n', '<leader>r', function()
+            if not opts.ts_wrapper then return nil end
+
+            local current_post_reply_id = opts.ts_wrapper:get_current_post_reply_id(vim.api.nvim_get_current_buf())
+            if current_post_reply_id and current_post_reply_id.id then
+                M.new_post { reply_id = current_post_reply_id.id }
+            else
+                vim.notify('The post should have an proper :ID:, so we can reply to', vim.log.levels.ERROR)
+            end
+        end, { desc = '[Org social] Reply to a post', buffer = true })
+
+        vim.api.nvim_create_autocmd({ 'BufDelete', 'BufWipeout' }, {
+            buffer = timeline_buf,
+            callback = function()
+                if vim.fn.filereadable(opts.temp_file) == 1 then
+                    os.remove(opts.temp_file)
+                end
+            end
+        })
+    end)
+end
+
 function M.open_timeline()
     local buf = vim.uri_to_bufnr(vim.uri_from_fname(M.social_file))
 
@@ -36,24 +91,23 @@ function M.open_timeline()
         return
     end
 
-    local metadata = ts_wrapper:get_metadata(buf)
-
-    local follows = ts_wrapper:get_follows(buf)
-
-    table.insert(follows, { name = M.nickname, url = M.path })
-
-    timeline.parse_timeline(follows, function(parsed_feeds)
-        view.render_timeline(parsed_feeds)
-    end)
+    load_timeline {
+        buf = buf,
+        ts_wrapper = ts_wrapper,
+        temp_file = vim.fn.tempname() .. '.org',
+        open_win = function(temp_file)
+            vim.cmd.vsplit(temp_file)
+        end
+    }
 end
 
 function M.edit_file()
     vim.cmd.tabedit(M.social_file)
 end
 
-function M.new_post()
-    local centered_window = function(content, opts)
-        opts = opts or {}
+function M.new_post(opts)
+    local centered_window = function(content, win_opts)
+        win_opts = win_opts or {}
         local width = math.floor(vim.o.columns * 0.8)
         local height = math.floor(vim.o.lines * 0.8)
         local buf = vim.api.nvim_create_buf(false, true)
@@ -69,9 +123,9 @@ function M.new_post()
             row = math.floor((vim.o.lines - height) / 2),
             col = math.floor((vim.o.columns - width) / 2),
             style = 'minimal',
-            title = opts.title,
+            title = win_opts.title,
             title_pos = 'center',
-            border = opts.border or 'rounded'
+            border = win_opts.border or 'rounded'
         })
 
         return buf, win
@@ -80,10 +134,13 @@ function M.new_post()
     local id = os.date("%Y-%m-%dT%H:%M:%S%z")
     local temp_file = vim.fn.tempname() .. '.org'
 
+    -- TODO: The correct format for a reply is the user URL to `social.org` plus `#` and then the reply_id:
+    -- e.g https://andros.dev/static/social.org#2025-09-03T12:12:57+0200
     local boilerplate = {
         '**',
         ':PROPERTIES:',
         ':ID: ' .. id,
+        opts.reply_id and ':REPLY_TO: ' .. opts.reply_id or '',
         ':END:',
         '',
         'Post body',
@@ -93,8 +150,7 @@ function M.new_post()
     vim.api.nvim_buf_set_name(buf, temp_file)
 
     -- NOTE: Activate select mode so the user has a "placeholder feel" to the post body text.
-    vim.api.nvim_win_set_cursor(win, { 6, 0 })
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('v$<C-g>', true, false, true), 'n', false)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('Gv$<C-g>', true, false, true), 'n', false)
 
     vim.api.nvim_create_autocmd('BufWriteCmd', {
         buffer = buf,

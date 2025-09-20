@@ -39,26 +39,6 @@ local function parse_posts(parsed_feeds)
     return all_posts
 end
 
-local function prepare_timeline_buffer(lines)
-    local temp_file = vim.fn.tempname() .. '.org'
-    vim.fn.writefile(lines, temp_file)
-    vim.cmd.vsplit(temp_file)
-
-    local buf = vim.api.nvim_get_current_buf()
-
-    vim.api.nvim_set_option_value('modified', false, { scope = 'local', buf = buf })
-    vim.api.nvim_set_option_value('bufhidden', 'delete', { scope = 'local', buf = buf })
-
-    vim.api.nvim_create_autocmd({ 'BufDelete', 'BufWipeout' }, {
-        buffer = buf,
-        callback = function()
-            if vim.fn.filereadable(temp_file) == 1 then
-                os.remove(temp_file)
-            end
-        end
-    })
-end
-
 function M.render_timeline(parsed_feeds)
     local lines = {}
     local all_posts = parse_posts(parsed_feeds)
@@ -91,6 +71,8 @@ function M.render_timeline(parsed_feeds)
 
     table.insert(lines, '#+TITLE: Org Social Timeline')
     table.insert(lines, '')
+    table.insert(lines, '# Actions: (<leader>n) New Post | (<leader>r) Reply to post | (<c-r>) Refresh timeline | (gq) Quit')
+    table.insert(lines, '')
     table.insert(lines, "* Timeline")
 
     for _, parent in ipairs(parents) do
@@ -112,7 +94,8 @@ function M.render_timeline(parsed_feeds)
         end
     end
 
-    prepare_timeline_buffer(lines)
+
+    return lines
 end
 
 return M
